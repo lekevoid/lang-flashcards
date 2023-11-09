@@ -8,11 +8,7 @@
 import { storeToRefs } from "pinia";
 import { useBaserowStore } from "stores/baserow";
 
-console.log(process.env.BASEROW_TOKEN);
-
-const { out, swedish } = storeToRefs(useBaserowStore());
-
-console.log(out);
+const { swedish } = storeToRefs(useBaserowStore());
 </script>
 
 <style lang="scss">

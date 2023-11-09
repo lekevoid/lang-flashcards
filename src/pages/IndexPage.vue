@@ -9,13 +9,6 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useBaserowStore } from "stores/baserow";
-
-console.log(process.env.BASEROW_TOKEN);
-
-const { out, swedish } = storeToRefs(useBaserowStore());
-
-console.log(out);
 </script>
