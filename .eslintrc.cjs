@@ -62,7 +62,7 @@ module.exports = {
 		"no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
 
 		// Mine
-		indent: ["warn", "tab", { SwitchCase: 1 }],
+		// indent: ["warn", "tab", { SwitchCase: 1 }],
 		semi: ["warn", "always"],
 		quotes: ["warn", "double"],
 	},
