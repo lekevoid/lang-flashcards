@@ -6,8 +6,6 @@ export const useBaserowStore = defineStore("baserow", () => {
 	const out = ref("Hello");
 	const swedish = ref([]);
 
-	console.log(process.env.BASEROW_TOKEN);
-
 	async function fetchSwedish() {
 		await axios({
 			method: "GET",
@@ -16,7 +14,6 @@ export const useBaserowStore = defineStore("baserow", () => {
 				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
 			},
 		}).then((res) => {
-			console.log(res.data.results);
 			swedish.value = res.data.results;
 		});
 	}
