@@ -1,14 +1,17 @@
 <template>
 	<q-page class="flex flex-center">
-		<img
-			alt="Quasar logo"
-			src="~assets/quasar-logo-vertical.svg"
-			style="width: 200px; height: 200px"
-		/>
+		<pre>{{ deck }}</pre>
 	</q-page>
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useBaserowStore } from "stores/baserow";
+
+const { arabic, swedish } = storeToRefs(useBaserowStore());
+
+const deck = computed(() => {
+	return [...arabic.value, ...swedish.value];
+});
 </script>
