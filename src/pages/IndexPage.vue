@@ -12,6 +12,16 @@ import { useBaserowStore } from "stores/baserow";
 const { arabic, swedish } = storeToRefs(useBaserowStore());
 
 const deck = computed(() => {
-	return [...arabic.value, ...swedish.value];
+	const out = [...arabic.value, ...swedish.value]
+		.map(({ Term: term, Translation: translation }) => {
+			if (!term || !translation) {
+				return null;
+			}
+
+			return { term, translation };
+		})
+		.filter(Boolean);
+
+	return out;
 });
 </script>
