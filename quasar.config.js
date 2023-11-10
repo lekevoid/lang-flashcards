@@ -119,16 +119,16 @@ module.exports = configure(function (ctx) {
 		animations: [],
 
 		// https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#property-sourcefiles
-		// sourceFiles: {
-		//   rootComponent: 'src/App.vue',
-		//   router: 'src/router/index',
-		//   store: 'src/store/index',
-		//   registerServiceWorker: 'src-pwa/register-service-worker',
-		//   serviceWorker: 'src-pwa/custom-service-worker',
-		//   pwaManifestFile: 'src-pwa/manifest.json',
-		//   electronMain: 'src-electron/electron-main',
-		//   electronPreload: 'src-electron/electron-preload'
-		// },
+		sourceFiles: {
+			//   rootComponent: 'src/App.vue',
+			//   router: 'src/router/index',
+			//   store: 'src/store/index',
+			registerServiceWorker: "src-pwa/register-service-worker",
+			serviceWorker: "src-pwa/custom-service-worker",
+			pwaManifestFile: "src-pwa/manifest.json",
+			//   electronMain: 'src-electron/electron-main',
+			//   electronPreload: 'src-electron/electron-preload'
+		},
 
 		// https://v2.quasar.dev/quasar-cli-vite/developing-ssr/configuring-ssr
 		ssr: {
@@ -138,7 +138,7 @@ module.exports = configure(function (ctx) {
 			// extendSSRWebserverConf (esbuildConf) {},
 			// extendPackageJson (json) {},
 
-			pwa: false,
+			pwa: true,
 
 			// manualStoreHydration: true,
 			// manualPostHydrationTrigger: true,
