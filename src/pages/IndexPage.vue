@@ -1,27 +1,44 @@
 <template>
-	<q-page class="flex flex-center">
-		<pre>{{ deck }}</pre>
+	<q-page class="row flex-center">
+		<q-carousel
+			class="col col-12"
+			v-model="currentCardID"
+			animated
+			swipeable
+			infinite
+			transition-prev="slide-right"
+			transition-next="slide-left"
+		>
+			<q-carousel-slide
+				v-for="card in deck"
+				:name="card.id"
+				:key="card.id"
+			>
+				<FlashCard :card="card" />
+			</q-carousel-slide>
+		</q-carousel>
 	</q-page>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { useBaserowStore } from "stores/baserow";
+import { useDeckStore } from "stores/deck";
+import { useSettingsStore } from "stores/settings";
 
-const { arabic, swedish } = storeToRefs(useBaserowStore());
+import FlashCard from "components/FlashCard.vue";
 
-const deck = computed(() => {
-	const out = [...arabic.value, ...swedish.value]
-		.map(({ Term: term, Translation: translation }) => {
-			if (!term || !translation) {
-				return null;
-			}
+const { deck } = storeToRefs(useDeckStore());
+const { questionMode } = storeToRefs(useSettingsStore());
 
-			return { term, translation };
-		})
-		.filter(Boolean);
+const currentCardID = ref(0);
 
-	return out;
+onMounted(() => {});
+
+watch(deck, (next, prev) => {
+	console.log(next, prev);
+	if (prev.length === 0 && next.length > 0) {
+		currentCardID.value = next[0].id;
+	}
 });
 </script>

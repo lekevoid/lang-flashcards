@@ -18,32 +18,23 @@
 		</q-header>
 
 		<q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-			<q-list>
-				<q-item-label header>Settings</q-item-label>
-				<q-item v-for="setting in settings" :key="setting.label">
-					{{ setting.label }}
-				</q-item>
-			</q-list>
+			<AppSettings />
 		</q-drawer>
 
 		<q-page-container>
 			<router-view />
 		</q-page-container>
 
-		<q-footer>
+		<!-- <q-footer>
 			<LexiconViewer />
-		</q-footer>
+		</q-footer> -->
 	</q-layout>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import LexiconViewer from "components/LexiconViewer.vue";
-
-const settings = [
-	{ label: "Arabic", default: false },
-	{ label: "Swedish", default: true },
-];
+import AppSettings from "components/AppSettings.vue";
 
 const leftDrawerOpen = ref(false);
 

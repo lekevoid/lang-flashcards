@@ -1,19 +1,18 @@
 <template>
 	<div class="lexicon">
-		<pre>{{ swedish }}</pre>
+		<pre>{{ deck }}</pre>
 	</div>
 </template>
 
 <script setup>
 import { storeToRefs } from "pinia";
-import { useBaserowStore } from "stores/baserow";
-
-const { swedish } = storeToRefs(useBaserowStore());
+import { useDeckStore } from "stores/deck";
+const { deck } = storeToRefs(useDeckStore());
 </script>
 
 <style lang="scss">
 .lexicon {
-	height: 400px;
+	height: 200px;
 	overflow-y: scroll;
 }
 </style>
