@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useDeckStore } from "stores/deck";
 import { useSettingsStore } from "stores/settings";
@@ -41,10 +41,12 @@ const currentCardID = ref(0);
 watch(deck, (next, prev) => {
 	if (next.length === 0) {
 		currentCardID.value = 0;
+		return;
 	}
 
 	if (prev.length === 0 && next.length > 0) {
 		currentCardID.value = next[0].id;
+		return;
 	}
 
 	if (prev[0] !== next[0]) {
