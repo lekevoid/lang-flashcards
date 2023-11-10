@@ -6,34 +6,27 @@
 					flat
 					dense
 					round
-					icon="menu"
+					icon="settings"
 					aria-label="Menu"
 					@click="toggleLeftDrawer"
 				/>
 
-				<q-toolbar-title> Quasar App </q-toolbar-title>
-
-				<div>Quasar v{{ $q.version }}</div>
+				<q-toolbar-title>Languages Flashcards</q-toolbar-title>
 			</q-toolbar>
 		</q-header>
 
-		<q-drawer v-model="leftDrawerOpen" show-if-above bordered>
+		<q-drawer v-model="leftDrawerOpen" bordered>
 			<AppSettings />
 		</q-drawer>
 
 		<q-page-container>
 			<router-view />
 		</q-page-container>
-
-		<!-- <q-footer>
-			<LexiconViewer />
-		</q-footer> -->
 	</q-layout>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import LexiconViewer from "components/LexiconViewer.vue";
 import AppSettings from "components/AppSettings.vue";
 
 const leftDrawerOpen = ref(false);

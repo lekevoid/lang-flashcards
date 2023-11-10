@@ -5,10 +5,10 @@
 		@click="flipped = !flipped"
 	>
 		<div class="cover heads bg-dark flex flex-center q-pa-xl shadow-5">
-			{{ card.term }}
+			<p class="q-ma-none">{{ card.term }}</p>
 		</div>
 		<div class="cover tails bg-dark flex flex-center q-pa-xl shadow-5">
-			{{ card.translation }}
+			<p class="q-ma-none">{{ card.translation }}</p>
 		</div>
 	</div>
 	<div
@@ -17,10 +17,10 @@
 		@click="flipped = !flipped"
 	>
 		<div class="cover heads bg-dark flex flex-center q-pa-xl shadow-5">
-			{{ card.translation }}
+			<p class="q-ma-none">{{ card.translation }}</p>
 		</div>
 		<div class="cover tails bg-dark flex flex-center q-pa-xl shadow-5">
-			{{ card.term }}
+			<p class="q-ma-none">{{ card.term }}</p>
 		</div>
 	</div>
 </template>
@@ -69,6 +69,11 @@ const flipped = ref(false);
 
 	.tails {
 		transform: translateZ(-2px) rotateY(180deg);
+	}
+
+	p {
+		user-select: none;
+		pointer-events: none;
 	}
 
 	&.flipped {
