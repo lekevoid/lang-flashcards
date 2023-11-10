@@ -1,7 +1,7 @@
 <template>
 	<q-page class="row flex-center">
 		<q-carousel
-			class="col col-12"
+			class="col col-12 bg-transparent"
 			v-model="currentCardID"
 			animated
 			swipeable

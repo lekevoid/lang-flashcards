@@ -1,13 +1,26 @@
 <template>
 	<div
 		:class="['flash_card', { flipped: flipped }]"
+		v-if="questionMode === 'term'"
 		@click="flipped = !flipped"
 	>
-		<div class="cover heads flex flex-center">
+		<div class="cover heads bg-dark flex flex-center q-pa-xl shadow-5">
 			{{ card.term }}
 		</div>
-		<div class="cover tails flex flex-center">
+		<div class="cover tails bg-dark flex flex-center q-pa-xl shadow-5">
 			{{ card.translation }}
+		</div>
+	</div>
+	<div
+		:class="['flash_card', { flipped: flipped }]"
+		v-if="questionMode === 'translation'"
+		@click="flipped = !flipped"
+	>
+		<div class="cover heads bg-dark flex flex-center q-pa-xl shadow-5">
+			{{ card.translation }}
+		</div>
+		<div class="cover tails bg-dark flex flex-center q-pa-xl shadow-5">
+			{{ card.term }}
 		</div>
 	</div>
 </template>
@@ -16,7 +29,9 @@
 import { ref, defineProps } from "vue";
 import { storeToRefs } from "pinia";
 import { useSettingsStore } from "stores/settings";
-const { includeArabic, includeSwedish } = storeToRefs(useSettingsStore());
+const { includeArabic, includeSwedish, questionMode } = storeToRefs(
+	useSettingsStore(),
+);
 
 const { card } = defineProps(["card"]);
 
@@ -28,22 +43,23 @@ const flipped = ref(false);
 	transition: transform 1s ease;
 	position: relative;
 	width: 90vw;
-	height: 80vh;
+	height: 70vh;
 	transform-style: preserve-3d;
 	perspective: 600px;
-	max-width: 600px;
+	max-width: 800px;
 	max-height: 400px;
 	margin: auto auto;
 	font-size: min(10vw, 40px);
 	text-align: center;
 
 	.cover {
+		border-radius: 0.6em;
+		overflow: hidden;
 		position: absolute;
 		left: 0;
 		top: 0;
 		width: 100%;
 		height: 100%;
-		background-color: #fff;
 		transition: transform 1s ease;
 	}
 
