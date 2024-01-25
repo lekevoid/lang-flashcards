@@ -40,19 +40,26 @@
 				keep-color
 			/>
 		</q-item>
+		<q-item-label header>Segments</q-item-label>
+		<q-item>
+			<q-option-group
+				v-model="enabledSegments"
+				:options="segments"
+				color="yellow"
+				type="toggle"
+			/>
+		</q-item>
 	</q-list>
 </template>
 
 <script setup>
 import { storeToRefs } from "pinia";
+import { useBaserowStore } from "stores/baserow";
 import { useSettingsStore } from "stores/settings";
 
-// const icon_arabic = require();
-// const icon_swedish = require("./swedish.png");
-
-const { includeArabic, includeSwedish, questionMode } = storeToRefs(
-	useSettingsStore(),
-);
+const { segments } = storeToRefs(useBaserowStore());
+const { includeArabic, includeSwedish, questionMode, enabledSegments } =
+	storeToRefs(useSettingsStore());
 </script>
 
 <style lang="scss" scoped>

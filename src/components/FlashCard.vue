@@ -29,9 +29,7 @@
 import { ref, defineProps } from "vue";
 import { storeToRefs } from "pinia";
 import { useSettingsStore } from "stores/settings";
-const { includeArabic, includeSwedish, questionMode } = storeToRefs(
-	useSettingsStore(),
-);
+const { questionMode } = storeToRefs(useSettingsStore());
 
 const { card } = defineProps(["card"]);
 
