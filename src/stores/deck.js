@@ -39,9 +39,6 @@ export const useDeckStore = defineStore("deck", () => {
 			start = start.concat(swedish.value);
 		}
 
-		console.log(enabledSegments.value);
-		console.log(start);
-
 		const out = start
 			.map(
 				({

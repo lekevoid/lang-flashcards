@@ -1,5 +1,5 @@
 <template>
-	<q-list>
+	<q-list class="app_settings">
 		<q-item-label header>Settings</q-item-label>
 		<q-item>
 			<q-item-section>
@@ -45,11 +45,24 @@
 			<q-option-group
 				v-model="enabledSegments"
 				:options="segments"
-				color="yellow"
+				color="blue"
 				type="toggle"
-			/>
+			>
+				<template v-slot:label="opt">
+					<div class="row items-center justify-between">
+						<span>{{ opt.label }}</span>
+						<q-icon
+							name="ads_click"
+							color="white"
+							size="2em"
+							@click.stop="enabledSegments = [opt.value]"
+						/>
+					</div>
+				</template>
+			</q-option-group>
 		</q-item>
 	</q-list>
+	<pe>{{ chosenSegments }}</pe>
 </template>
 
 <script setup>
@@ -62,11 +75,23 @@ const { includeArabic, includeSwedish, questionMode, enabledSegments } =
 	storeToRefs(useSettingsStore());
 </script>
 
-<style lang="scss" scoped>
-img {
-	transition: filter 0.3s;
-	&.disabled {
-		filter: grayscale(1);
+<style lang="scss">
+.app_settings {
+	.q-option-group,
+	.q-toggle {
+		width: 100%;
+		flex: 0 0 100%;
+	}
+
+	.q-toggle__label {
+		width: 100%;
+	}
+
+	img {
+		transition: filter 0.3s;
+		&.disabled {
+			filter: grayscale(1);
+		}
 	}
 }
 </style>
