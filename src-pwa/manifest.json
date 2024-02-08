@@ -2,7 +2,7 @@
 	"name": "Language Flashcards",
 	"short_name": "Lang Flashcards",
 	"orientation": "portrait",
-	"background_color": "#ffffff",
+	"background_color": "#000000",
 	"theme_color": "#027be3",
 	"icons": [
 		{
