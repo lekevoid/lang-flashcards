@@ -5,6 +5,7 @@ import { slugify } from "../composables/useTextHelper";
 
 export const useBaserowStore = defineStore("baserow", () => {
 	const arabic = ref([]);
+	const german = ref([]);
 	const swedish = ref([]);
 	const segments = ref([]);
 
@@ -17,6 +18,18 @@ export const useBaserowStore = defineStore("baserow", () => {
 			},
 		}).then((res) => {
 			arabic.value = res.data.results;
+		});
+	}
+
+	async function fetchGerman() {
+		await axios({
+			method: "GET",
+			url: "https://api.baserow.io/api/database/rows/table/248192/?user_field_names=true",
+			headers: {
+				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
+			},
+		}).then((res) => {
+			german.value = res.data.results;
 		});
 	}
 
@@ -53,6 +66,10 @@ export const useBaserowStore = defineStore("baserow", () => {
 		fetchArabic();
 	}
 
+	if (german.value.length === 0) {
+		fetchGerman();
+	}
+
 	if (swedish.value.length === 0) {
 		fetchSwedish();
 	}
@@ -61,5 +78,5 @@ export const useBaserowStore = defineStore("baserow", () => {
 		fetchSegments();
 	}
 
-	return { arabic, swedish, segments };
+	return { arabic, german, swedish, segments };
 });

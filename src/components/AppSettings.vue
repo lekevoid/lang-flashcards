@@ -3,13 +3,13 @@
 		<q-item-label header>Settings</q-item-label>
 		<q-item>
 			<q-item-section>
-				<q-toggle v-model="includeArabic" label="Arabic" />
+				<q-toggle v-model="includeGerman" label="German" />
 			</q-item-section>
 			<q-item-section avatar>
 				<q-avatar size="md">
 					<img
-						src="../assets/arabic.png"
-						:class="[{ disabled: !includeArabic }]"
+						src="../assets/german.png"
+						:class="[{ disabled: !includeGerman }]"
 					/>
 				</q-avatar>
 			</q-item-section>
@@ -23,6 +23,19 @@
 					<img
 						src="../assets/swedish.png"
 						:class="[{ disabled: !includeSwedish }]"
+					/>
+				</q-avatar>
+			</q-item-section>
+		</q-item>
+		<q-item>
+			<q-item-section>
+				<q-toggle v-model="includeArabic" label="Arabic" />
+			</q-item-section>
+			<q-item-section avatar>
+				<q-avatar size="md">
+					<img
+						src="../assets/arabic.png"
+						:class="[{ disabled: !includeArabic }]"
 					/>
 				</q-avatar>
 			</q-item-section>
@@ -44,7 +57,7 @@
 		<q-item>
 			<q-option-group
 				v-model="enabledSegments"
-				:options="segments"
+				:options="displaySegments"
 				color="blue"
 				type="toggle"
 			>
@@ -66,13 +79,30 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useBaserowStore } from "stores/baserow";
+import { useDeckStore } from "stores/deck";
 import { useSettingsStore } from "stores/settings";
 
 const { segments } = storeToRefs(useBaserowStore());
-const { includeArabic, includeSwedish, questionMode, enabledSegments } =
-	storeToRefs(useSettingsStore());
+const { usedSegments } = storeToRefs(useDeckStore());
+
+// console.log(usedSegments.value);
+
+const displaySegments = computed(() =>
+	segments.value.filter((segment) =>
+		usedSegments.value.includes(segment.label),
+	),
+);
+
+const {
+	includeArabic,
+	includeGerman,
+	includeSwedish,
+	questionMode,
+	enabledSegments,
+} = storeToRefs(useSettingsStore());
 </script>
 
 <style lang="scss">

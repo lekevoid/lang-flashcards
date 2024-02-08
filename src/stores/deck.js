@@ -6,10 +6,11 @@ import { useBaserowStore } from "stores/baserow";
 import { useSettingsStore } from "stores/settings";
 
 export const useDeckStore = defineStore("deck", () => {
-	const { arabic, swedish, segments } = storeToRefs(useBaserowStore());
-	const { includeArabic, includeSwedish, enabledSegments } = storeToRefs(
-		useSettingsStore(),
+	const { arabic, german, swedish, segments } = storeToRefs(
+		useBaserowStore(),
 	);
+	const { includeArabic, includeGerman, includeSwedish, enabledSegments } =
+		storeToRefs(useSettingsStore());
 
 	function shuffle(array) {
 		for (let i = array.length - 1; i > 0; i--) {
@@ -28,16 +29,26 @@ export const useDeckStore = defineStore("deck", () => {
 		);
 	}
 
-	const deck = computed(() => {
-		let start = [];
+	function getInitialDecksByLanguage() {
+		let out = [];
 
 		if (includeArabic.value) {
-			start = start.concat(arabic.value);
+			out = out.concat(arabic.value);
+		}
+
+		if (includeGerman.value) {
+			out = out.concat(german.value);
 		}
 
 		if (includeSwedish.value) {
-			start = start.concat(swedish.value);
+			out = out.concat(swedish.value);
 		}
+
+		return out;
+	}
+
+	const deck = computed(() => {
+		const start = getInitialDecksByLanguage();
 
 		const out = start
 			.map(
@@ -77,7 +88,27 @@ export const useDeckStore = defineStore("deck", () => {
 		return shuffle(out);
 	});
 
+	const usedSegments = computed(() => {
+		let out = [];
+		const start = getInitialDecksByLanguage();
+
+		if (start.length === 0) {
+			return [];
+		}
+
+		start.forEach(({ Segment: segments }) => {
+			segments.forEach((segment) => {
+				if (!out.includes(segment.value)) {
+					out.push(segment.value);
+				}
+			});
+		});
+
+		return out;
+	});
+
 	return {
 		deck,
+		usedSegments,
 	};
 });
