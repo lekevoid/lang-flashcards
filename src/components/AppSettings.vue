@@ -88,8 +88,6 @@ import { useSettingsStore } from "stores/settings";
 const { segments } = storeToRefs(useBaserowStore());
 const { usedSegments } = storeToRefs(useDeckStore());
 
-// console.log(usedSegments.value);
-
 const displaySegments = computed(() =>
 	segments.value.filter((segment) =>
 		usedSegments.value.includes(segment.label),
