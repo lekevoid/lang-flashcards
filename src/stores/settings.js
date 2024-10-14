@@ -6,8 +6,8 @@ import { useBaserowStore } from "stores/baserow";
 export const useSettingsStore = defineStore("settings", () => {
 	const { segments } = storeToRefs(useBaserowStore());
 
-	const includeGerman = ref(false);
-	const includeSwedish = ref(true);
+	const includeGerman = ref(true);
+	const includeSwedish = ref(false);
 	const includeArabic = ref(false);
 	const questionMode = ref("term");
 	const enabledSegments = ref([]);
