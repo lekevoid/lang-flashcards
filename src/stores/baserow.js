@@ -24,7 +24,7 @@ export const useBaserowStore = defineStore("baserow", () => {
 	async function fetchGerman() {
 		await axios({
 			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/248192/?user_field_names=true",
+			url: "https://api.baserow.io/api/database/rows/table/248192/?user_field_names=true&page=1&size=200",
 			headers: {
 				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
 			},
@@ -36,7 +36,7 @@ export const useBaserowStore = defineStore("baserow", () => {
 	async function fetchSwedish() {
 		await axios({
 			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/216913/?user_field_names=true",
+			url: "https://api.baserow.io/api/database/rows/table/216913/?user_field_names=true&page=1&size=200",
 			headers: {
 				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
 			},
@@ -48,7 +48,7 @@ export const useBaserowStore = defineStore("baserow", () => {
 	async function fetchSegments() {
 		await axios({
 			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/246594/?user_field_names=true",
+			url: "https://api.baserow.io/api/database/rows/table/246594/?user_field_names=true&page=1&size=200",
 			headers: {
 				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
 			},

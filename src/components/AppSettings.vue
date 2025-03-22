@@ -75,7 +75,7 @@
 			</q-option-group>
 		</q-item>
 	</q-list>
-	<pe>{{ chosenSegments }}</pe>
+	<pre class="console"></pre>
 </template>
 
 <script setup>
@@ -93,6 +93,8 @@ const displaySegments = computed(() =>
 		usedSegments.value.includes(segment.label),
 	),
 );
+
+console.log(displaySegments.value);
 
 const {
 	includeArabic,

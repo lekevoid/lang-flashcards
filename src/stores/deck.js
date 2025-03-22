@@ -3,14 +3,26 @@ import { defineStore, storeToRefs } from "pinia";
 import { slugify } from "../composables/useTextHelper";
 
 import { useBaserowStore } from "stores/baserow";
+import { useMultilangStore } from "stores/multilang";
 import { useSettingsStore } from "stores/settings";
 
 export const useDeckStore = defineStore("deck", () => {
 	const { arabic, german, swedish, segments } = storeToRefs(
 		useBaserowStore(),
 	);
-	const { includeArabic, includeGerman, includeSwedish, enabledSegments } =
-		storeToRefs(useSettingsStore());
+	const {
+		includeArabic,
+		includeGerman,
+		includeSwedish,
+		enabledSegments,
+		mlStartLang,
+		mlIncludeEnglish,
+		mlIncludeGerman,
+		mlIncludeSwedish,
+		mlIncludeArabic,
+		mlIncludeGreek,
+	} = storeToRefs(useSettingsStore());
+	const { multilang } = storeToRefs(useMultilangStore());
 
 	function shuffle(array) {
 		for (let i = array.length - 1; i > 0; i--) {
@@ -88,6 +100,42 @@ export const useDeckStore = defineStore("deck", () => {
 		return shuffle(out);
 	});
 
+	const multilangDeck = computed(() => {
+		const fromLang = mlStartLang.value.value;
+
+		const out = multilang.value.map((term) => {
+			let card = { term: "", translations: [] };
+
+			card.term = term[fromLang];
+
+			if (fromLang !== "EN" && mlIncludeEnglish.value) {
+				card.translations.push(term.EN);
+			}
+
+			if (fromLang !== "AR" && mlIncludeArabic.value) {
+				card.translations.push(term.AR);
+			}
+
+			if (fromLang !== "DE" && mlIncludeGerman.value) {
+				card.translations.push(term.DE);
+			}
+
+			if (fromLang !== "EL" && mlIncludeGreek.value) {
+				card.translations.push(term.EL);
+			}
+
+			if (fromLang !== "SV" && mlIncludeSwedish.value) {
+				card.translations.push(term.SV);
+			}
+
+			card.id = hashCode(card.term);
+
+			return card;
+		});
+
+		return shuffle(out);
+	});
+
 	const usedSegments = computed(() => {
 		let out = [];
 		const start = getInitialDecksByLanguage();
@@ -109,6 +157,7 @@ export const useDeckStore = defineStore("deck", () => {
 
 	return {
 		deck,
+		multilangDeck,
 		usedSegments,
 	};
 });

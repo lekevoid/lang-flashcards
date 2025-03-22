@@ -13,7 +13,7 @@
 
 				<q-toolbar-title>Languages Flashcards</q-toolbar-title>
 
-				<a href="/new">
+				<a href="/">
 					<q-icon
 						name="flip"
 						color="white"
@@ -25,7 +25,7 @@
 		</q-header>
 
 		<q-drawer v-model="leftDrawerOpen" bordered>
-			<AppSettings />
+			<MultilangSettings />
 		</q-drawer>
 
 		<q-page-container>
@@ -36,7 +36,7 @@
 
 <script setup>
 import { ref } from "vue";
-import AppSettings from "components/AppSettings.vue";
+import MultilangSettings from "components/MultilangSettings.vue";
 
 const leftDrawerOpen = ref(false);
 
