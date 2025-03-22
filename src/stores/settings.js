@@ -7,9 +7,9 @@ import { useBaserowStore } from "stores/baserow";
 export const useSettingsStore = defineStore("settings", () => {
 	const { segments } = storeToRefs(useBaserowStore());
 
-	const includeGerman = ref(SessionStorage.getItem("includeGerman") || false);
+	const includeGerman = ref(SessionStorage.getItem("includeGerman") || true);
 	const includeSwedish = ref(
-		SessionStorage.getItem("includeSwedish") || true,
+		SessionStorage.getItem("includeSwedish") || false,
 	);
 	const includeArabic = ref(SessionStorage.getItem("includeArabic") || false);
 	const questionMode = ref(SessionStorage.getItem("questionMode") || "term");
@@ -17,7 +17,13 @@ export const useSettingsStore = defineStore("settings", () => {
 		SessionStorage.getItem("enabledSegments") || [],
 	);
 
-	const mlStartLang = ref({ value: "EN", label: "English" });
+	const mlStartLang = ref(
+		SessionStorage.getItem("mlStartLang") || {
+			value: "EN",
+			label: "English",
+		},
+	);
+
 	const langOptions = ref([
 		{ value: "EN", label: "English" },
 		{ value: "DE", label: "German" },
@@ -25,35 +31,46 @@ export const useSettingsStore = defineStore("settings", () => {
 		{ value: "SV", label: "Swedish" },
 		{ value: "AR", label: "Arabic" },
 	]);
-	const mlIncludeEnglish = ref(true);
-	const mlIncludeArabic = ref(false);
-	const mlIncludeGerman = ref(true);
-	const mlIncludeGreek = ref(true);
-	const mlIncludeSwedish = ref(true);
+
+	const mlIncludeEnglish = ref(SessionStorage.getItem("mlIncludeEnglish"));
+	const mlIncludeArabic = ref(SessionStorage.getItem("mlIncludeArabic"));
+	const mlIncludeGerman = ref(SessionStorage.getItem("mlIncludeGerman"));
+	const mlIncludeGreek = ref(SessionStorage.getItem("mlIncludeGreek"));
+	const mlIncludeSwedish = ref(SessionStorage.getItem("mlIncludeSwedish"));
 
 	watch(segments, () => {
 		enabledSegments.value = segments.value.map((segment) => segment.value);
 	});
 
-	watch(includeGerman, (newVal) => {
-		SessionStorage.set("includeGerman", newVal);
-	});
-
-	watch(includeSwedish, (newVal) => {
-		SessionStorage.set("includeSwedish", newVal);
-	});
-
-	watch(includeArabic, (newVal) => {
-		SessionStorage.set("includeArabic", newVal);
-	});
-
-	watch(questionMode, (newVal) => {
-		SessionStorage.set("questionMode", newVal);
-	});
-
-	watch(enabledSegments, (newVal) => {
-		SessionStorage.set("enabledSegments", newVal);
-	});
+	watch(
+		[
+			includeGerman,
+			includeSwedish,
+			includeArabic,
+			questionMode,
+			enabledSegments,
+			mlStartLang,
+			mlIncludeEnglish,
+			mlIncludeArabic,
+			mlIncludeGerman,
+			mlIncludeGreek,
+			mlIncludeSwedish,
+		],
+		() => {
+			SessionStorage.set("includeGerman", includeGerman.value);
+			SessionStorage.set("includeSwedish", includeSwedish.value);
+			SessionStorage.set("includeArabic", includeArabic.value);
+			SessionStorage.set("questionMode", questionMode.value);
+			SessionStorage.set("enabledSegments", enabledSegments.value);
+			SessionStorage.set("mlStartLang", mlStartLang.value);
+			SessionStorage.set("mlIncludeEnglish", mlIncludeEnglish.value);
+			SessionStorage.set("mlIncludeArabic", mlIncludeArabic.value);
+			SessionStorage.set("mlIncludeGerman", mlIncludeGerman.value);
+			SessionStorage.set("mlIncludeGreek", mlIncludeGreek.value);
+			SessionStorage.set("mlIncludeSwedish", mlIncludeSwedish.value);
+		},
+		{ immediate: true },
+	);
 
 	return {
 		includeGerman,
