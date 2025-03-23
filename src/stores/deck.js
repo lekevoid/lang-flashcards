@@ -103,35 +103,37 @@ export const useDeckStore = defineStore("deck", () => {
 	const multilangDeck = computed(() => {
 		const fromLang = mlStartLang.value.value;
 
-		const out = multilang.value.map((term) => {
-			let card = { term: "", translations: [] };
+		const out = multilang.value
+			.filter((term) => term.Active && term.EN !== "")
+			.map((term) => {
+				let card = { term: "", translations: [] };
 
-			card.term = term[fromLang];
+				card.term = term[fromLang];
 
-			if (fromLang !== "EN" && mlIncludeEnglish.value) {
-				card.translations.push(term.EN);
-			}
+				if (fromLang !== "EN" && mlIncludeEnglish.value) {
+					card.translations.push(term.EN);
+				}
 
-			if (fromLang !== "AR" && mlIncludeArabic.value) {
-				card.translations.push(term.AR);
-			}
+				if (fromLang !== "AR" && mlIncludeArabic.value) {
+					card.translations.push(term.AR);
+				}
 
-			if (fromLang !== "DE" && mlIncludeGerman.value) {
-				card.translations.push(term.DE);
-			}
+				if (fromLang !== "DE" && mlIncludeGerman.value) {
+					card.translations.push(term.DE);
+				}
 
-			if (fromLang !== "EL" && mlIncludeGreek.value) {
-				card.translations.push(term.EL);
-			}
+				if (fromLang !== "EL" && mlIncludeGreek.value) {
+					card.translations.push(term.EL);
+				}
 
-			if (fromLang !== "SV" && mlIncludeSwedish.value) {
-				card.translations.push(term.SV);
-			}
+				if (fromLang !== "SV" && mlIncludeSwedish.value) {
+					card.translations.push(term.SV);
+				}
 
-			card.id = hashCode(card.term);
+				card.id = hashCode(card.term);
 
-			return card;
-		});
+				return card;
+			});
 
 		return shuffle(out);
 	});
