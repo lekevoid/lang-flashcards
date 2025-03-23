@@ -7,11 +7,9 @@ import { useBaserowStore } from "stores/baserow";
 export const useSettingsStore = defineStore("settings", () => {
 	const { segments } = storeToRefs(useBaserowStore());
 
-	const includeGerman = ref(SessionStorage.getItem("includeGerman") || true);
-	const includeSwedish = ref(
-		SessionStorage.getItem("includeSwedish") || false,
-	);
-	const includeArabic = ref(SessionStorage.getItem("includeArabic") || false);
+	const includeGerman = ref(!!SessionStorage.getItem("includeGerman"));
+	const includeSwedish = ref(!!SessionStorage.getItem("includeSwedish"));
+	const includeArabic = ref(!!SessionStorage.getItem("includeArabic"));
 	const questionMode = ref(SessionStorage.getItem("questionMode") || "term");
 	const enabledSegments = ref(
 		SessionStorage.getItem("enabledSegments") || [],
@@ -32,11 +30,26 @@ export const useSettingsStore = defineStore("settings", () => {
 		{ value: "AR", label: "Arabic" },
 	]);
 
-	const mlIncludeEnglish = ref(SessionStorage.getItem("mlIncludeEnglish"));
-	const mlIncludeArabic = ref(SessionStorage.getItem("mlIncludeArabic"));
-	const mlIncludeGerman = ref(SessionStorage.getItem("mlIncludeGerman"));
-	const mlIncludeGreek = ref(SessionStorage.getItem("mlIncludeGreek"));
-	const mlIncludeSwedish = ref(SessionStorage.getItem("mlIncludeSwedish"));
+	const mlIncludeEnglish = ref(!!SessionStorage.getItem("mlIncludeEnglish"));
+	const mlIncludeArabic = ref(!!SessionStorage.getItem("mlIncludeArabic"));
+	const mlIncludeGerman = ref(!!SessionStorage.getItem("mlIncludeGerman"));
+	const mlIncludeGreek = ref(!!SessionStorage.getItem("mlIncludeGreek"));
+	const mlIncludeSwedish = ref(!!SessionStorage.getItem("mlIncludeSwedish"));
+
+	if (
+		!mlIncludeArabic.value &&
+		!mlIncludeGerman.value &&
+		!mlIncludeGreek.value &&
+		!mlIncludeSwedish.value
+	) {
+		mlIncludeGerman.value = true;
+		mlIncludeGreek.value = true;
+		mlIncludeSwedish.value = true;
+	}
+
+	if (!includeGerman.value && !includeSwedish.value && !includeArabic.value) {
+		includeSwedish.value = true;
+	}
 
 	watch(segments, () => {
 		enabledSegments.value = segments.value.map((segment) => segment.value);
