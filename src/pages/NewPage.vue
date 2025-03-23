@@ -29,8 +29,6 @@
 import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useDeckStore } from "stores/deck";
-import { useMultilangStore } from "stores/multilang";
-import { useSettingsStore } from "stores/settings";
 
 import Card from "components/MLFlashCard.vue";
 

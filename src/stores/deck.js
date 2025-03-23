@@ -103,12 +103,27 @@ export const useDeckStore = defineStore("deck", () => {
 	const multilangDeck = computed(() => {
 		const fromLang = mlStartLang.value.value;
 
+		if (multilang.value.length === 0) return [];
+
 		const out = multilang.value
 			.filter((term) => term.Active && term.EN !== "")
 			.map((term) => {
 				let card = { term: "", translations: [] };
 
 				card.term = term[fromLang];
+
+				let hasEnabledSegment = false;
+				term.Segments.forEach((segment) => {
+					if (
+						enabledSegments.value.includes(slugify(segment.value))
+					) {
+						hasEnabledSegment = true;
+					}
+				});
+
+				if (!hasEnabledSegment) {
+					return null;
+				}
 
 				if (fromLang !== "EN" && mlIncludeEnglish.value) {
 					card.translations.push(term.EN);
@@ -133,7 +148,8 @@ export const useDeckStore = defineStore("deck", () => {
 				card.id = hashCode(card.term);
 
 				return card;
-			});
+			})
+			.filter(Boolean);
 
 		return shuffle(out);
 	});
@@ -157,9 +173,32 @@ export const useDeckStore = defineStore("deck", () => {
 		return out;
 	});
 
+	const mlUsedSegments = computed(() => {
+		let out = [];
+
+		if (!multilang.value || multilang.value.length === 0) {
+			return [];
+		}
+
+		console.log(multilang.value);
+
+		multilang.value.forEach(({ Segments: segments }) => {
+			segments.forEach((segment) => {
+				if (!out.includes(segment.value)) {
+					out.push(segment.value);
+				}
+			});
+		});
+
+		console.log(out);
+
+		return out;
+	});
+
 	return {
 		deck,
 		multilangDeck,
 		usedSegments,
+		mlUsedSegments,
 	};
 });

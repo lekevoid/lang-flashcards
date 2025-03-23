@@ -110,7 +110,7 @@ import { useDeckStore } from "stores/deck";
 import { useSettingsStore } from "stores/settings";
 
 const { segments } = storeToRefs(useBaserowStore());
-const { usedSegments } = storeToRefs(useDeckStore());
+const { mlUsedSegments } = storeToRefs(useDeckStore());
 const {
 	enabledSegments,
 	mlStartLang,
@@ -124,7 +124,7 @@ const {
 
 const displaySegments = computed(() =>
 	segments.value.filter((segment) =>
-		usedSegments.value.includes(segment.label),
+		mlUsedSegments.value.includes(segment.label),
 	),
 );
 </script>

@@ -9,7 +9,7 @@ export const useMultilangStore = defineStore("multilang", () => {
 	async function fetchMultilang() {
 		await axios({
 			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/481699/?user_field_names=true",
+			url: "https://api.baserow.io/api/database/rows/table/481699/?user_field_names=true&size=200&filter__Active__equal=true",
 			headers: {
 				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
 			},
