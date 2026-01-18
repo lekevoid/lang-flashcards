@@ -29,14 +29,10 @@
 import { ref, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useDeckStore } from "stores/deck";
-import { useSettingsStore } from "stores/settings";
 
 import FlashCard from "components/FlashCard.vue";
 
 const { deck } = storeToRefs(useDeckStore());
-const { questionMode } = storeToRefs(useSettingsStore());
-
-console.log(deck.value);
 
 const currentCardID = ref(0);
 

@@ -1,82 +1,63 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { axios } from "boot/axios";
 import { defineStore } from "pinia";
 import { slugify } from "../composables/useTextHelper";
 
 export const useBaserowStore = defineStore("baserow", () => {
-	const arabic = ref([]);
-	const german = ref([]);
-	const swedish = ref([]);
-	const segments = ref([]);
+	const dico = ref([]);
 
-	async function fetchArabic() {
-		await axios({
-			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/216936/?user_field_names=true",
-			headers: {
-				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
-			},
-		}).then((res) => {
-			arabic.value = res.data.results;
-		});
+	async function fetchAllDicoPages(baseUrl, resultArray) {
+		let page = 1;
+		let hasMore = true;
+
+		while (hasMore) {
+			const response = await axios({
+				method: "GET",
+				url: `${baseUrl}&page=${page}&size=200`,
+				headers: {
+					Authorization: `Token ${process.env.BASEROW_TOKEN}`,
+				},
+			});
+
+			resultArray.push(
+				...response.data.results.map((r) => ({
+					...r,
+					Segments: r.Segments.map((s) => s.value),
+				})),
+			);
+
+			hasMore = response.data.next !== null;
+			page++;
+		}
 	}
 
-	async function fetchGerman() {
-		await axios({
-			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/248192/?user_field_names=true&page=1&size=200",
-			headers: {
-				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
-			},
-		}).then((res) => {
-			german.value = res.data.results;
-		});
+	async function fetchDico() {
+		dico.value = [];
+		await fetchAllDicoPages(
+			"https://api.baserow.io/api/database/rows/table/481699/?user_field_names=true",
+			dico.value,
+		);
 	}
 
-	async function fetchSwedish() {
-		await axios({
-			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/216913/?user_field_names=true&page=1&size=200",
-			headers: {
-				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
-			},
-		}).then((res) => {
-			swedish.value = res.data.results;
-		});
+	const allSegments = computed(() => {
+		return [
+			...new Set(dico.value.map((e) => [...e.Segments]).flat()),
+		].sort();
+	});
+
+	const allLangs = computed(() => {
+		if (dico.value.length > 0) {
+			return Object.keys(dico.value[0]).filter(
+				(key) => key !== "id" && key.match(/^\w{2}$/),
+			);
+		}
+
+		return [];
+	});
+
+	if (dico.value.length === 0) {
+		fetchDico();
 	}
 
-	async function fetchSegments() {
-		await axios({
-			method: "GET",
-			url: "https://api.baserow.io/api/database/rows/table/246594/?user_field_names=true&page=1&size=200",
-			headers: {
-				Authorization: `Token ${process.env.BASEROW_TOKEN}`,
-			},
-		}).then((res) => {
-			segments.value = res.data.results
-				.map((s) => ({
-					label: s.Name,
-					value: slugify(s.Name),
-				}))
-				.sort((a, b) => a.label.localeCompare(b.label));
-		});
-	}
-
-	if (arabic.value.length === 0) {
-		fetchArabic();
-	}
-
-	if (german.value.length === 0) {
-		fetchGerman();
-	}
-
-	if (swedish.value.length === 0) {
-		fetchSwedish();
-	}
-
-	if (segments.value.length === 0) {
-		fetchSegments();
-	}
-
-	return { arabic, german, swedish, segments };
+	return { dico, allSegments, allLangs };
 });

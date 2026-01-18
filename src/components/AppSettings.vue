@@ -1,58 +1,34 @@
 <template>
 	<q-list class="app_settings">
-		<q-item-label header>Settings</q-item-label>
+		<q-item-label header>From</q-item-label>
 		<q-item>
-			<q-item-section>
-				<q-toggle v-model="includeGerman" label="German" />
-			</q-item-section>
-			<q-item-section avatar>
-				<q-avatar size="md">
-					<img
-						src="../assets/german.png"
-						:class="[{ disabled: !includeGerman }]"
-					/>
-				</q-avatar>
-			</q-item-section>
+			<q-avatar
+				size="md"
+				class="lang_toggle q-mr-md"
+				v-for="lang in allLangs"
+				@click="toggleFromLang(lang)"
+				:key="lang"
+			>
+				<img
+					:src="`/langs/${lang}.png`"
+					:class="[{ disabled: !fromLangs.includes(lang) }]"
+				/>
+			</q-avatar>
 		</q-item>
+		<q-item-label header>To</q-item-label>
 		<q-item>
-			<q-item-section>
-				<q-toggle v-model="includeSwedish" label="Swedish" />
-			</q-item-section>
-			<q-item-section avatar>
-				<q-avatar size="md">
-					<img
-						src="../assets/swedish.png"
-						:class="[{ disabled: !includeSwedish }]"
-					/>
-				</q-avatar>
-			</q-item-section>
-		</q-item>
-		<q-item>
-			<q-item-section>
-				<q-toggle v-model="includeArabic" label="Arabic" />
-			</q-item-section>
-			<q-item-section avatar>
-				<q-avatar size="md">
-					<img
-						src="../assets/arabic.png"
-						:class="[{ disabled: !includeArabic }]"
-					/>
-				</q-avatar>
-			</q-item-section>
-		</q-item>
-		<q-item-label header>Question Mode</q-item-label>
-		<q-item>
-			<q-toggle
-				v-model="questionMode"
-				:label="questionMode"
-				color="blue"
-				checked-icon="check"
-				unchecked-icon="clear"
-				false-value="term"
-				true-value="translation"
-				keep-color
-			/>
-		</q-item>
+			<q-avatar
+				size="md"
+				class="lang_toggle q-mr-md"
+				v-for="lang in allLangs"
+				@click="toggleToLang(lang)"
+				:key="lang"
+			>
+				<img
+					:src="`/langs/${lang}.png`"
+					:class="[{ disabled: !toLangs.includes(lang) }]"
+				/> </q-avatar
+		></q-item>
 		<q-item-label header>Segments</q-item-label>
 		<q-item>
 			<q-option-group
@@ -70,9 +46,8 @@
 							size="2em"
 							@click.stop="enabledSegments = [opt.value]"
 						/>
-					</div>
-				</template>
-			</q-option-group>
+					</div> </template
+			></q-option-group>
 		</q-item>
 	</q-list>
 	<pre class="console"></pre>
@@ -81,32 +56,35 @@
 <script setup>
 import { computed } from "vue";
 import { storeToRefs } from "pinia";
-import { useBaserowStore } from "stores/baserow";
-import { useDeckStore } from "stores/deck";
 import { useSettingsStore } from "stores/settings";
 
-const { segments } = storeToRefs(useBaserowStore());
-const { usedSegments } = storeToRefs(useDeckStore());
+const { fromLangs, toLangs, allSegments, enabledSegments, allLangs } =
+	storeToRefs(useSettingsStore());
+const { toggleFromLang, toggleToLang } = useSettingsStore();
 
-const displaySegments = computed(() =>
-	segments.value.filter((segment) =>
-		usedSegments.value.includes(segment.label),
-	),
-);
-
-console.log(displaySegments.value);
-
-const {
-	includeArabic,
-	includeGerman,
-	includeSwedish,
-	questionMode,
-	enabledSegments,
-} = storeToRefs(useSettingsStore());
+const displaySegments = computed(() => {
+	return allSegments.value.map((s) => ({
+		label: s,
+		value: s,
+	}));
+});
 </script>
 
 <style lang="scss">
 .app_settings {
+	.lang_toggle {
+		cursor: pointer;
+
+		img {
+			transition: filter 0.3s;
+
+			&.disabled {
+				filter: grayscale(1);
+				cursor: pointer !important;
+			}
+		}
+	}
+
 	.q-option-group,
 	.q-toggle {
 		width: 100%;
@@ -115,13 +93,6 @@ const {
 
 	.q-toggle__label {
 		width: 100%;
-	}
-
-	img {
-		transition: filter 0.3s;
-		&.disabled {
-			filter: grayscale(1);
-		}
 	}
 }
 </style>

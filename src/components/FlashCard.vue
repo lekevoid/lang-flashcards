@@ -1,37 +1,51 @@
 <template>
 	<div
 		:class="['flash_card', { flipped: flipped }]"
-		v-if="questionMode === 'term'"
 		@click="flipped = !flipped"
 	>
 		<div class="cover heads bg-dark flex flex-center q-pa-xl shadow-5">
-			<p class="q-ma-none">{{ card.term }}</p>
+			<p class="q-ma-none">
+				{{ cardDetails.headSide }}
+			</p>
 		</div>
 		<div class="cover tails bg-dark flex flex-center q-pa-xl shadow-5">
-			<p class="q-ma-none">{{ card.translation }}</p>
-		</div>
-	</div>
-	<div
-		:class="['flash_card', { flipped: flipped }]"
-		v-if="questionMode === 'translation'"
-		@click="flipped = !flipped"
-	>
-		<div class="cover heads bg-dark flex flex-center q-pa-xl shadow-5">
-			<p class="q-ma-none">{{ card.translation }}</p>
-		</div>
-		<div class="cover tails bg-dark flex flex-center q-pa-xl shadow-5">
-			<p class="q-ma-none">{{ card.term }}</p>
+			<p
+				class="q-ma-none"
+				v-for="(detail, j) in cardDetails.flipSide"
+				:key="`flip_${j}`"
+			>
+				{{ detail }}
+			</p>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, computed, defineProps } from "vue";
 import { storeToRefs } from "pinia";
 import { useSettingsStore } from "stores/settings";
-const { questionMode } = storeToRefs(useSettingsStore());
+const { fromLangs, toLangs } = storeToRefs(useSettingsStore());
 
 const { card } = defineProps(["card"]);
+
+const cardDetails = computed(() => {
+	const headSide =
+		card[
+			fromLangs.value[Math.floor(Math.random() * fromLangs.value.length)]
+		];
+
+	let flipSide = [];
+	for (const lang of toLangs.value) {
+		flipSide.push(card[lang]);
+	}
+
+	console.log({ headSide, flipSide });
+
+	return {
+		headSide,
+		flipSide,
+	};
+});
 
 const flipped = ref(false);
 </script>
@@ -53,6 +67,7 @@ const flipped = ref(false);
 	.cover {
 		border-radius: 0.6em;
 		overflow: hidden;
+		transform-style: preserve-3d;
 		position: absolute;
 		left: 0;
 		top: 0;
