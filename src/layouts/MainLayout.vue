@@ -38,7 +38,7 @@
 import { ref } from "vue";
 import AppSettings from "components/AppSettings.vue";
 
-const leftDrawerOpen = ref(true);
+const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
 	leftDrawerOpen.value = !leftDrawerOpen.value;
