@@ -12,15 +12,6 @@
 				/>
 
 				<q-toolbar-title>Languages Flashcards</q-toolbar-title>
-
-				<a href="/new">
-					<q-icon
-						name="flip"
-						color="white"
-						size="24px"
-						@click.stop="enabledSegments = [opt.value]"
-					/>
-				</a>
 			</q-toolbar>
 		</q-header>
 
