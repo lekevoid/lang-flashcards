@@ -32,6 +32,8 @@ export const useDeckStore = defineStore("deck", () => {
 					}
 				}
 
+				out.order = dico.value.indexOf(entry);
+
 				return out;
 			})
 			.filter(Boolean)

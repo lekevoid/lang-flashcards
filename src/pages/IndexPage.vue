@@ -22,11 +22,12 @@
 				</q-carousel-slide>
 			</q-carousel>
 		</div>
+		<div class="counter">{{ currentCardOrder }}/{{ deck.length }}</div>
 	</q-page>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useDeckStore } from "stores/deck";
 
@@ -35,6 +36,10 @@ import FlashCard from "components/FlashCard.vue";
 const { deck } = storeToRefs(useDeckStore());
 
 const currentCardID = ref(0);
+
+const currentCardOrder = computed(() => {
+	return deck.value.findIndex((card) => card.id === currentCardID.value) + 1;
+});
 
 watch(deck, (next, prev) => {
 	if (next.length === 0) {
@@ -52,3 +57,16 @@ watch(deck, (next, prev) => {
 	}
 });
 </script>
+
+<style lang="scss">
+.counter {
+	position: absolute;
+	bottom: 16px;
+	right: 16px;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: white;
+	padding: 8px 12px;
+	border-radius: 8px;
+	font-size: 14px;
+}
+</style>
